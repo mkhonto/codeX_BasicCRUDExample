@@ -1,3 +1,5 @@
+/*insert script to populate supplies*/
+
 insert into Suppliers (name) values ("Makro");
 insert into Suppliers (name) values ("Epping Market");
 insert into Suppliers (name) values ("HomaMade");

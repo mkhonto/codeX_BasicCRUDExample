@@ -23,11 +23,10 @@ create table Suppliers (
 
 create table Sales (
 					id int not null primary key auto_increment,
-					date char(35), 
+					date date, 
 				    products_id int,
-				    product_name varchar(35),
 					no_sold int,
-					selling_Price int, 
+					selling_Price decimal(10,2), 
 				    foreign key(Products_id) references Products(id)
 				    );
 
@@ -36,7 +35,7 @@ create table Purchases (
 					product_id int,
 					quantity int,
 					supplier_id int,
-					cost_price int, 
+					cost_price decimal(10,2), 
 					foreign key(product_id) references Products(id),
 					foreign key(supplier_id) references Suppliers(id) 
 				    );

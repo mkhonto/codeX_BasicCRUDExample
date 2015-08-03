@@ -1,3 +1,5 @@
+/*insert script to populate products*/
+
 insert into Products (name, category_id) values ('Bread', 1);
 insert into Products (name, category_id) values ('Iwisa Pap 5kg', 2);
 insert into Products (name, category_id) values ('Chakalaka Can', 3);
