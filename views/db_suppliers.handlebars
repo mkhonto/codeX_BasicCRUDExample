@@ -1,0 +1,45 @@
+
+<a href="suppliers/add">Add suppliers</a>
+<table class="table">
+ <tr>
+  <td> 
+    Suppliers Name
+  </td>
+   <td> 
+    Product Name
+  </td>
+   <td> 
+    Category Name
+  </td>
+  <td> 
+    Quantity Bought
+  </td>
+ </tr>
+{{#products}}
+ <tr>
+  <td>
+   {{SupplierName}}
+  </td>
+
+   <td>
+   {{ProductName}}
+  </td>
+
+   <td>
+   {{CategoryName}}
+  </td>
+
+   <td>
+   {{QuantityBought}}
+  </td>
+
+  <td>
+   <a href="/Suppliers/edit/{{id}}">Edit</a>
+   </td>
+  <td>
+   <a href="/Suppliers/delete/{{id}}">Delete</a>
+  </td>
+
+ </tr>
+{{/products}}
+</table>

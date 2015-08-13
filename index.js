@@ -6,6 +6,7 @@ var express = require('express'),
     myConnection = require('express-myconnection'),
     bodyParser = require('body-parser'),
     products = require('./routes/products');
+    
 
 var app = express();
 

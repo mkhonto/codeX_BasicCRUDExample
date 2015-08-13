@@ -1,0 +1,45 @@
+<h1>Sales</h1>
+<table class="table">
+ <tr>
+  <td> 
+   Day
+  </td>
+  <td> 
+   Date
+  </td>
+  <td> 
+   Product Name
+  </td>
+  <td> 
+   Sold Number
+  </td>
+  <td> 
+   Selling Price
+  </td>
+ </tr>
+{{#products}}
+  <tr>
+  <td>
+   {{Day}}
+  </td>
+   <td> 
+   {{Date}}
+   </td>
+  <td>
+   {{ProductName}}
+  </td>
+   <td>
+   {{SoldNumber}}
+  </td>
+   <td>
+   {{SellingPrice}}
+  </td>
+  <td>
+   <a href="/Sales/edit/{{id}}">Edit</a>
+   </td>
+  <td>
+   <a href="/Sales/delete/{{id}}">Delete</a>
+  </td>
+ </tr>
+{{/products}}
+</table>

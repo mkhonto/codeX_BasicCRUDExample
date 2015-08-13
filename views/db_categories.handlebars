@@ -1,0 +1,23 @@
+<h1>Categories</h1>
+
+<a href="categories/add">Add Categories</a>
+<table class="table">
+ <tr>
+  <td> 
+   Categories
+  </td>
+ </tr>
+{{#products}}
+ <tr>
+  <td>
+   {{name}}
+  </td>
+  <td>
+   <a href="/Categories/edit/{{id}}">Edit</a>
+   </td>
+  <td>
+   <a href="/Categoriess/delete/{{id}}">Delete</a>
+  </td>
+ </tr>
+{{/products}}
+</table>

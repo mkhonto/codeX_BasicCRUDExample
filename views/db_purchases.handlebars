@@ -1,0 +1,47 @@
+<h1>Purchases</h1>
+<table class="table">
+ <tr>
+   <td> 
+    ProductName
+   </td>
+
+  <td> 
+    SupplierName
+  </td>
+
+  <td> 
+    Quantity
+  </td>
+
+  <td> 
+    Total_Cost
+  </td>
+
+ </tr>
+{{#products}}
+ <tr>
+  <td>
+    {{ProductName}}
+  </td>
+
+  <td>
+    {{SupplierName}}
+  </td>
+
+  <td>
+    {{Quantity}}
+  </td>
+
+   <td>
+    {{Total_Cost}}
+   </td>
+
+  <td>
+   <a href="/Sales/edit/{{id}}">Edit</a>
+   </td>
+  <td>
+   <a href="/Sales/delete/{{id}}">Delete</a>
+  </td>
+ </tr>
+{{/products}}
+</table>
