@@ -47,6 +47,7 @@ app.get('/Purchases', db_purchases.show);
 app.get('/Sales', db_sales.show);
 // routes will go here
 
+
 //start the server
 
 //returns categories from the db 

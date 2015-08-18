@@ -2,7 +2,7 @@ exports.show = function (req, res, next) {
 	req.getConnection(function(err, connection){
 		if (err) 
 			return next(err);
-		connection.query("select sales_csv.day as Day,date_format(sales_csv.date, '%e %M %Y') as Date, sales_csv.stock_item as ProductName, sales_csv.no_sold as SoldNumber, sales_csv.sales_price as SellingPrice from sales_csv", [], function(err, results) {
+		connection.query("select date_format(Sales.date, '%e %M %Y') as Date, Products.name as ProductName, Categories.name as CategoryName,Sales.no_sold as SoldNumber,Sales.selling_price as SellingPrice  from Sales  inner join Products on Sales.products_id = Products.id inner join Categories on Categories.id = Products.Category_id", [], function(err, results) {
         	if (err) return next(err);
 
     		res.render( 'db_sales', {
@@ -10,4 +10,4 @@ exports.show = function (req, res, next) {
     		});
       });
 	});
-};
+}; 
