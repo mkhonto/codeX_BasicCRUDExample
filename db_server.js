@@ -23,6 +23,8 @@ var dbOptions = {
 	database: 'Nelisa_Spaza',
 };
 
+app.use(express.static(__dirname + '/public'));
+
 //setup middleware
 app.use(myConnection(mysql, dbOptions, 'single'));
 // parser application/x-www-form-urlencoded
@@ -40,19 +42,94 @@ app.post('/Products/update/:id', db_products.update);
 app.post('/Products/add/:id', db_products.add);
 app.get('/Products/delete/:id', db_products.delete);
 
-app.get('/Products', db_products.show);
-app.get('/Categories', db_categories.show);
+// create a route 
+app.get('/products', db_products.show);
+app.get('/products/add', function(req, res){
+	res.render('products_add')
+});
+
+app.post('/products/add', function(req, res){
+	var data = { name : req.body.products};
+
+    req.getConnection(function(err, connection){
+        connection.query("insert into Products set ?", data, function(err,results){
+			if(err)
+			  console.log(err);
+
+			  res.redirect('/products'); 
+		});
+	});		  
+});
+
+app.get('/categories', db_categories.show);
+app.get('/categories/add', function(req, res){
+	res.render('categories_add')
+});
+
+app.get('/categories/delete/:id', function(req, res){
+	var categoryId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("delete from Categories where Id =  ?", [categoryId], function(err,results){
+			if(err)
+    			console.log(err);
+
+    			res.redirect('/categories');    
+		});
+
+	});
+
+});
+
+app.post('/categories/add', function(req, res){
+	var data = { name : req.body.category};
+
+    req.getConnection(function(err, connection){
+        connection.query("insert into Categories set ?", data, function(err,results){
+			if(err)
+			  console.log(err);
+
+			  res.redirect('/categories'); 
+		});
+	});		  
+});
+
+app.get('/categories/edit/:id', function(req, res){
+	var categoryId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("select * from Categories where Id =  ?", [categoryId], function(err,results){
+			var category = results[0];
+    			//console.log(err);
+    			res.render('categories_edit', {
+    			 category : category    
+		  });
+
+	  });
+
+  });
+
+app.post('/categories/edit/:id', function(req, res){
+	 var id = req.params.id;
+	 var data = { name : req.body.category};
+	 req.getConnection(function(err, connection){
+	 	connection.query("update Categories set ? where Id = ?",[data, id] ,function(err, results){
+	 		if (err)
+	 			console.log(err);
+
+	 		res.redirect('/categories');
+
+	 	});
+
+  });
+
+});
+
 app.get('/Suppliers', db_suppliers.show);
 app.get('/Purchases', db_purchases.show);
 app.get('/Sales', db_sales.show);
-// routes will go here
-
 
 //start the server
-
-//returns categories from the db 
-
-
 app.listen(3000, function(){
 	console.log('Server started! At http://localhost: 3000');
 });

@@ -1,8 +1,9 @@
 body {
-	background-color: dodgerblue;
-	font-family: "Arial";
+	background-color: black;
+	font-family: "cursive";
 	margin: 0px;
 	padding: 0px;
+	
 }
 
 #container{
@@ -11,13 +12,15 @@ body {
 	height: 600px;
 	background-color: #FFF;
 	margin-top: 50px;
-	padding: 15px;
+	padding: 5px;
 }
 
 #add-products {
 	border : 1px solid;
 	width: 50%;
 	padding: 15px;
+	font: white;
+
 }
 
 input[type=text] {

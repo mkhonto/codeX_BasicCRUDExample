@@ -1,10 +1,10 @@
 <h1>Categories</h1>
 
-<a href="categories/add">Add Categories</a>
+<a href="/categories/add">Add Category</a>
 <table class="table">
- <tr>
-  <td> 
-   Categories
+   <tr>
+    <td> 
+   Category Name
   </td>
  </tr>
 {{#products}}
@@ -13,10 +13,10 @@
    {{name}}
   </td>
   <td>
-   <a href="/Categories/edit/{{id}}">Edit</a>
+   <a href="/categories/edit/{{id}}">Edit</a>
    </td>
   <td>
-   <a href="/Categoriess/delete/{{id}}">Delete</a>
+   <a href="/categories/delete/{{id}}">Delete</a>
   </td>
  </tr>
 {{/products}}

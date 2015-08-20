@@ -1,32 +1,34 @@
 <h1>Products</h1>
+
+<a href="/products/add">Add Products</a>
 <table class="table">
 
  <tr>
-   <td> 
+    <td> 
     Product Name
    </td>
-   <td> 
+    <td> 
     Category Name
    </td>
 
  </tr>
-{{#products}}
-
- <tr>
-  <td>
-   {{ProductName}}
-  </td>
-  <td>
-   {{CategoryName}}
-  </td>
-
-   <a href="/Products/edit/{{id}}">Edit</a>
+    {{#products}}
+   <tr>
+    <td>
+    {{ProductName}}
    </td>
-  <td>
-   <a href="/Products/delete/{{id}}">Delete</a>
-  </td>
+    <td>
+    {{CategoryName}}
+   </td>
+    <td>
+     <a href="/products/edit/{{id}}">Edit</a>
+   </td>
+    <td>
+     <a href="/products/delete/{{id}}">Delete</a>
+   </td>
  </tr>
 {{/products}}
+
 </table>
 
 

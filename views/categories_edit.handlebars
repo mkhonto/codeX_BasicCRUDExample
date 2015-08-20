@@ -1,0 +1,16 @@
+
+<html>
+<head>
+  <title>Edit category</title>
+</head>
+
+<body>
+   <h1>Edit category</h1>
+
+	<form action="/categories/edit/{{category.id}}" method="post">
+		 <input type="text" name="category" placeholder="Edit category" value="{{category.name}}"/>	
+		 <input type="submit" name="submit" value="Submit"/>
+	</form>
+
+</body>
+</html>

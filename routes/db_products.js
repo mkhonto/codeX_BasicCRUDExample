@@ -11,7 +11,7 @@ exports.show = function (req, res, next) {
       });
 	});
 };
-exports.add = function (req, res, next) {
+exports.add = function (req, res) {
 	req.getConnection(function(err, connection){
 
 		var input = JSON.parse(JSON.stringify(req.body));
@@ -40,7 +40,7 @@ exports.get = function(req, res, next){
     			console.log("Error Selecting : %s ",err );
 			}
 
-			res.render('edit',{page_title:"Edit Customers - Node.js", data : rows[0]});      
+			res.render('edit_products.',{page_title:"Edit Customers - Node.js", data : rows[0]});      
 		}); 
 	});
 };
