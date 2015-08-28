@@ -3,41 +3,20 @@
 <table class="table">
  <tr>
   <td> 
-    Suppliers Name
-  </td>
-   <td> 
-    Product Name
-  </td>
-   <td> 
-    Category Name
-  </td>
-  <td> 
-    Quantity Bought
+    Supplier Name
   </td>
  </tr>
 {{#products}}
  <tr>
   <td>
-   {{SupplierName}}
-  </td>
-
-   <td>
-   {{ProductName}}
-  </td>
-
-   <td>
-   {{CategoryName}}
-  </td>
-
-   <td>
-   {{QuantityBought}}
+   {{name}}
   </td>
 
   <td>
-   <a href="/Suppliers/edit/{{id}}">Edit</a>
+   <a href="/suppliers/edit/{{name}}">Edit</a>
    </td>
   <td>
-   <a href="/Suppliers/delete/{{id}}">Delete</a>
+   <a href="/suppliers/delete/{{name}}">Delete</a>
   </td>
 
  </tr>

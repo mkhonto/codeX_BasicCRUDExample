@@ -35,22 +35,20 @@ app.use(bodyParser.json());
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
-// setup the handlers
-app.get('/', db_products.show);
-app.get('/Products/edit/:id', db_products.get);
-app.post('/Products/update/:id', db_products.update);
-app.post('/Products/add/:id', db_products.add);
-app.get('/Products/delete/:id', db_products.delete);
-
 // create a route 
+app.get('/', db_products.show);
 app.get('/products', db_products.show);
+
 app.get('/products/add', function(req, res){
 	res.render('products_add')
 });
 
 app.post('/products/add', function(req, res){
-	var data = { name : req.body.products};
-
+	var data = { 
+		      category_id : req.body.categoryId,
+		      name : req.body.product
+		    		};
+					
     req.getConnection(function(err, connection){
         connection.query("insert into Products set ?", data, function(err,results){
 			if(err)
@@ -60,6 +58,55 @@ app.post('/products/add', function(req, res){
 		});
 	});		  
 });
+
+app.get('/products/delete/:id', function(req, res){
+	var productId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("delete from Products where Id =  ?", [productId], function(err,results){
+			if(err)
+    			console.log(err);
+
+    			res.redirect('/products');    
+		});
+
+	});
+
+});
+
+app.get('/products/edit/:id', function(req, res){
+	var productId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("select * from Products where Id =  ?", [productId], function(err,results){
+			var product = results[0];
+    			//console.log(err);
+    			res.render('products_edit', {
+    			 product : product    
+		  });
+
+	  });
+
+  });
+
+app.post('/products/edit/:id', function(req, res){
+	 var id = req.params.id;
+	 var data = { name : req.body.product};
+	 req.getConnection(function(err, connection){
+	 	connection.query("update Products set ? where Id = ?",[data, id] ,function(err, results){
+	 		if (err)
+	 			console.log(err);
+
+	 		res.redirect('/products');
+
+	  	});
+
+    });
+
+  });
+
+});
+
 
 app.get('/categories', db_categories.show);
 app.get('/categories/add', function(req, res){
@@ -81,6 +128,7 @@ app.get('/categories/delete/:id', function(req, res){
 
 });
 
+//started here
 app.post('/categories/add', function(req, res){
 	var data = { name : req.body.category};
 
@@ -90,8 +138,10 @@ app.post('/categories/add', function(req, res){
 			  console.log(err);
 
 			  res.redirect('/categories'); 
-		});
-	});		  
+		  });
+
+	 });
+
 });
 
 app.get('/categories/edit/:id', function(req, res){
@@ -119,14 +169,90 @@ app.post('/categories/edit/:id', function(req, res){
 
 	 		res.redirect('/categories');
 
-	 	});
+	  	});
+
+    });
 
   });
 
 });
 
-app.get('/Suppliers', db_suppliers.show);
-app.get('/Purchases', db_purchases.show);
+app.get('/suppliers', db_suppliers.show);
+app.get('/suppliers/add', function(req, res){
+	res.render('suppliers_add')
+});
+
+app.post('/suppliers/add', function(req, res){
+	var data = { name : req.body.supplier};
+
+    req.getConnection(function(err, connection){
+        connection.query("insert into Suppliers set ?", data, function(err,results){
+			if(err)
+			  console.log(err);
+
+			  res.redirect('/suppliers'); 
+		  });
+
+	 });
+
+});
+
+app.get('/suppliers/edit/:id', function(req, res){
+	var supplierName = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("select * from Suppliers where Name =  ?", [supplierName], function(err,results){
+			var supplier = results[0];
+    			//console.log(err);
+    			res.render('suppliers_edit', {
+    			 supplier : supplier    
+		  });
+
+	  });
+
+  });
+
+app.post('/suppliers/edit/:id', function(req, res){
+	 var id = req.params.id;
+	 var data = { name : req.body.supplier};
+	 req.getConnection(function(err, connection){
+	 	connection.query("update Suppliers set ? where Name = ?",[id] ,function(err, results){
+	 		if (err)
+	 			console.log(err);
+
+	 		res.redirect('/suppliers');
+
+	  	});
+
+    });
+
+  });
+
+});
+
+
+app.get('/purchases', db_purchases.show);
+app.get('/purchases/add', function(req, res){
+	res.render('purchases_add')
+});
+
+app.post('/purchases/add', function(req, res){
+	var data = { 
+		      purchase
+		      : req.body.purchaseId,
+		      name : req.body.purchase
+		    		};
+					
+    req.getConnection(function(err, connection){
+        connection.query("insert into Purchases set ?", data, function(err,results){
+			if(err)
+			  console.log(err);
+
+			  res.redirect('/purchases'); 
+		});
+	});		  
+});
+
 app.get('/Sales', db_sales.show);
 
 //start the server

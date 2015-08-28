@@ -1,5 +1,5 @@
 body {
-	background-color: black;
+	background-color: blue;
 	font-family: "cursive";
 	margin: 0px;
 	padding: 0px;
@@ -9,7 +9,7 @@ body {
 #container{
 	margin: 0 auto;
 	width: 80%;
-	height: 600px;
+	height: 3000px;
 	background-color: #FFF;
 	margin-top: 50px;
 	padding: 5px;

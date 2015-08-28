@@ -1,0 +1,16 @@
+
+<html>
+<head>
+  <title>Edit product</title>
+</head>
+
+<body>
+   <h1>Edit product</h1>
+
+	<form action="/products/edit/{{product.id}}" method="post">
+		 <input type="text" name="product" placeholder="Edit product" value="{{product.name}}"/>	
+		 <input type="submit" name="submit" value="Submit"/>
+	</form>
+
+</body>
+</html>
