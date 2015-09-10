@@ -12,6 +12,7 @@ var db_categories = require('./routes/db_categories');
 var db_suppliers = require('./routes/db_suppliers');
 var db_purchases = require('./routes/db_purchases');
 var db_sales = require('./routes/db_sales');
+var db_main = require('./routes/db_main');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 // create a route 
+app.get('/', db_main.show);
 app.get('/', db_products.show);
 app.get('/products', db_products.show);
 
@@ -107,28 +109,12 @@ app.post('/products/edit/:id', function(req, res){
 
 });
 
-
+//started here
 app.get('/categories', db_categories.show);
 app.get('/categories/add', function(req, res){
 	res.render('categories_add')
 });
 
-app.get('/categories/delete/:id', function(req, res){
-	var categoryId = req.params.id;
-	req.getConnection(function(err, connection){
-
-		connection.query("delete from Categories where Id =  ?", [categoryId], function(err,results){
-			if(err)
-    			console.log(err);
-
-    			res.redirect('/categories');    
-		});
-
-	});
-
-});
-
-//started here
 app.post('/categories/add', function(req, res){
 	var data = { name : req.body.category};
 
@@ -157,7 +143,7 @@ app.get('/categories/edit/:id', function(req, res){
 
 	  });
 
-  });
+  }); 
 
 app.post('/categories/edit/:id', function(req, res){
 	 var id = req.params.id;
@@ -176,6 +162,22 @@ app.post('/categories/edit/:id', function(req, res){
   });
 
 });
+
+app.get('/categories/delete/:id', function(req, res){
+	var categoryId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("delete from Categories where Id =  ?", [categoryId], function(err,results){
+			if(err)
+    			console.log(err);
+
+    			res.redirect('/categories');    
+		});
+
+	});
+
+});
+
 
 app.get('/suppliers', db_suppliers.show);
 app.get('/suppliers/add', function(req, res){
@@ -198,10 +200,10 @@ app.post('/suppliers/add', function(req, res){
 });
 
 app.get('/suppliers/edit/:id', function(req, res){
-	var supplierName = req.params.id;
+	var supplierId = req.params.id;
 	req.getConnection(function(err, connection){
 
-		connection.query("select * from Suppliers where Name =  ?", [supplierName], function(err,results){
+		connection.query("select * from Suppliers where Id =  ?", [supplierId], function(err,results){
 			var supplier = results[0];
     			//console.log(err);
     			res.render('suppliers_edit', {
@@ -216,7 +218,7 @@ app.post('/suppliers/edit/:id', function(req, res){
 	 var id = req.params.id;
 	 var data = { name : req.body.supplier};
 	 req.getConnection(function(err, connection){
-	 	connection.query("update Suppliers set ? where Name = ?",[id] ,function(err, results){
+	 	connection.query("update Suppliers set ? where Id = ?",[data,id] ,function(err, results){
 	 		if (err)
 	 			console.log(err);
 
@@ -230,6 +232,20 @@ app.post('/suppliers/edit/:id', function(req, res){
 
 });
 
+app.get('/suppliers/delete/:id', function(req, res){
+	var supplierId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("delete from Suppliers where Id =  ?", [supplierId], function(err,results){
+			if(err)
+    			console.log(err);
+
+    			res.redirect('/suppliers');    
+		});
+
+	});
+
+});
 
 app.get('/purchases', db_purchases.show);
 app.get('/purchases/add', function(req, res){
@@ -237,10 +253,12 @@ app.get('/purchases/add', function(req, res){
 });
 
 app.post('/purchases/add', function(req, res){
-	var data = { 
-		      purchase
-		      : req.body.purchaseId,
-		      name : req.body.purchase
+	var input = JSON.parse(JSON.stringify(req.body));
+	var data = { id: input.id,
+		           product_id: input. product_id,
+		           quantity: input. quantity,
+		           supplier_id: input. supplier_id,
+		           cost_price: input. cost_price
 		    		};
 					
     req.getConnection(function(err, connection){
@@ -251,9 +269,28 @@ app.post('/purchases/add', function(req, res){
 			  res.redirect('/purchases'); 
 		});
 	});		  
+})
+
+app.get('/sales', db_sales.show);
+app.get('/sales/add', function(req, res){
+	res.render('sales_add')
 });
 
-app.get('/Sales', db_sales.show);
+app.post('/sales/add', function(req, res){
+	var data = { 
+		      product_id : req.body.productId,
+		      name : req.body.sale
+		    		};
+					
+    req.getConnection(function(err, connection){
+        connection.query("insert into Sales set ?", data, function(err,results){
+			if(err)
+			  console.log(err);
+
+			  res.redirect('/sales'); 
+		});
+	});		  
+});
 
 //start the server
 app.listen(3000, function(){

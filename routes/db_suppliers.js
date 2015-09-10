@@ -2,7 +2,7 @@ exports.show = function (req, res, next) {
 	req.getConnection(function(err, connection){
 		if (err) 
 			return next(err);
-		connection.query('select * from Suppliers', [], function(err, results) {
+		connection.query('SELECT * from Suppliers', [], function(err, results) {
         	if (err) return next(err);
 
     		res.render( 'db_suppliers', {
