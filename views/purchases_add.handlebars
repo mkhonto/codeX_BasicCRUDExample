@@ -10,7 +10,23 @@
  	
 
 	<form action="/purchases/add" method="post">
-		<input type="text" name="purchase" placeholder="Add purchase"/>	
+	    <input type="number" name="quantity" min="0" max="1000" value="quantity" placeholder="quantity"/>	
+
+	    <select name="product_id" label="choose Product">
+          {{#products}}
+            <option value="{{id}}" >{{name}}</option>
+          {{/products}}
+
+ 	   </select>
+       
+       <select name="supplier_id">
+          {{#suppliers}}
+          <option value="{{id}}">{{name}}</option>
+          {{/suppliers}}
+
+ 	   </select>
+
+		<input type="number" name="cost_price" placeholder="cost price"/>	
 		<input type="submit" name="submit" value="Submit"/>
 	</form>
 

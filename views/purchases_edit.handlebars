@@ -8,6 +8,19 @@
    <h1>Edit purchase</h1>
 
 	<form action="/purchases/edit/{{purchase.id}}" method="post">
+
+	    <select name="product_id" label="choose purchase">
+          {{#products}}
+            <option value="{{id}}" >{{name}}</option>
+          {{/products}}
+
+ 	   </select>
+       
+       <select name="supplier_id">
+          {{#categories}}
+          <option value="{{id}}">{{name}}</option>
+          {{/categories}}
+
 		 <input type="text" name="purchase" placeholder="Edit purchase" value="{{purchase.name}}"/>	
 		 <input type="submit" name="submit" value="Submit"/>
 	</form>

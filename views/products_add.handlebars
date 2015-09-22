@@ -1,30 +1,23 @@
 
 <html>
 <head>
-  <title>Add product</title>
+  <title>Add a product</title>
 </head>
 
 <body>
-   <h1>Add product</h1>
+   <h1>Add a product</h1>
  
  	
 
 	<form action="/products/add" method="post">
 
 	<select name="categoryId">
- 		 <option value="1">Bakery</option>
- 		 <option value="2">Bulk</option>
- 		 <option value="3">Canned Food</option>
- 		 <option value="4">Cold Beverages</option>
- 		 <option value="5">Confectionary</option>
- 		 <option value="6">Cosmetics</option>
- 		 <option value="7">Dairy</option>
- 		 <option value="8">Fruits</option>
- 		 <option value="9">Soup</option>
- 		 <option value="10">Valentine Goodies</option>
+        {{#categories}}
+          <option value="{{id}}">{{name}}</option>
+        {{/categories}}
  	</select>
 
-		 <input type="text" name="product" placeholder="Add product"/>	
+		 <input type="text" name="product" placeholder="Add a product"/>	
 		 <input type="submit" name="submit" value="Submit"/>
 	</form>
 

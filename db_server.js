@@ -41,8 +41,19 @@ app.get('/', db_main.show);
 app.get('/', db_products.show);
 app.get('/products', db_products.show);
 
+//this connect to the web form
 app.get('/products/add', function(req, res){
-	res.render('products_add')
+
+  req.getConnection(function(err, connection){
+
+   var categoryQuery = "select id, name from Categories";
+      
+        connection.query(categoryQuery, function(err, categories){
+				if (err) return next(err);
+				res.render('products_add', {categories : categories});
+        });
+    });
+
 });
 
 app.post('/products/add', function(req, res){
@@ -77,17 +88,34 @@ app.get('/products/delete/:id', function(req, res){
 });
 
 app.get('/products/edit/:id', function(req, res){
+
+	var categoryQuery = "select id, name from Categories";
 	var productId = req.params.id;
 	req.getConnection(function(err, connection){
 
-		connection.query("select * from Products where Id =  ?", [productId], function(err,results){
+		connection.query(categoryQuery, function(err, categories){
+			if(err) return next(err);
+			connection.query("select * from Products where Id =  ?", [productId], function(err,results){
+
+
 			var product = results[0];
+
+			var categoryList = categories.map(function(category){
+				return{ 
+					id : category.id,
+					name : category.name,
+					selected : category.id === product.category_id
+				}
+			});
     			//console.log(err);
     			res.render('products_edit', {
+    			 categories : categoryList,
     			 product : product    
-		  });
+		        });
+            });
+	    });
 
-	  });
+     });
 
   });
 
@@ -107,7 +135,6 @@ app.post('/products/edit/:id', function(req, res){
 
   });
 
-});
 
 //started here
 app.get('/categories', db_categories.show);
@@ -249,17 +276,32 @@ app.get('/suppliers/delete/:id', function(req, res){
 
 app.get('/purchases', db_purchases.show);
 app.get('/purchases/add', function(req, res){
-	res.render('purchases_add')
+
+	req.getConnection(function(err, connection){
+		var products = "select id, name from Products";
+		var suppliers = "select id, name from Suppliers";
+
+
+		  connection.query(products, function(err, products){
+		  connection.query(suppliers, function(err, suppliers){
+		  	 if (err) return next(err);
+		 
+	         res.render('purchases_add', {products : products, suppliers : suppliers});
+            });
+        });
+    });
 });
 
+
+
 app.post('/purchases/add', function(req, res){
-	var input = JSON.parse(JSON.stringify(req.body));
-	var data = { id: input.id,
-		           product_id: input. product_id,
-		           quantity: input. quantity,
-		           supplier_id: input. supplier_id,
-		           cost_price: input. cost_price
-		    		};
+	var data = {
+		supplier_id : req.body. supplier_id,
+		product_id : req.body. product_id,
+		quantity : req.body. quantity,
+		cost_price : req.body. cost_price
+	}
+
 					
     req.getConnection(function(err, connection){
         connection.query("insert into Purchases set ?", data, function(err,results){
@@ -270,6 +312,51 @@ app.post('/purchases/add', function(req, res){
 		});
 	});		  
 })
+
+app.get('/purchases/edit/:id', function(req, res){
+	var productId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("select * from Purchases where Id =  ?", [productId], function(err,results){
+
+			var product = results[0];
+
+			var productList = products.map(function(product){
+				return{ 
+					id : product.id,
+					name : product.name,
+					selected : product.id === product.supplier_id
+				}
+			});
+    			//console.log(err);
+    			res.render('purchase_edit', {
+    			 product : productList,
+    			 purchase : purchase    
+		  });
+
+	  });
+
+  });
+
+});
+
+app.post('/purchases/edit/:id', function(req, res){
+	 var id = req.params.id;
+	 var data = { name : req.body.purchase};
+	 req.getConnection(function(err, connection){
+	 	connection.query("update Purchases set ? where Id = ?",[data,id] ,function(err, results){
+	 		if (err)
+	 			console.log(err);
+
+	 		res.redirect('/purchases');
+
+	  	});
+
+    });
+
+  });
+
+
 
 app.get('/sales', db_sales.show);
 app.get('/sales/add', function(req, res){
