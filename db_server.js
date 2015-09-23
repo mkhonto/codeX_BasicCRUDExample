@@ -112,7 +112,9 @@ app.get('/products/edit/:id', function(req, res){
     			 categories : categoryList,
     			 product : product    
 		        });
+            
             });
+	    
 	    });
 
      });
@@ -127,13 +129,13 @@ app.post('/products/edit/:id', function(req, res){
 	 		if (err)
 	 			console.log(err);
 
-	 		res.redirect('/products');
+	 		 res.redirect('/products');
 
-	  	});
+	  	    });
+
+        });
 
     });
-
-  });
 
 
 //started here
@@ -314,31 +316,49 @@ app.post('/purchases/add', function(req, res){
 })
 
 app.get('/purchases/edit/:id', function(req, res){
-	var productId = req.params.id;
-	req.getConnection(function(err, connection){
 
-		connection.query("select * from Purchases where Id =  ?", [productId], function(err,results){
+var productQuery = "select id, name from Products";
+	var supplierQuery = "select id, name from Suppliers";
+	var purchaseId = req.params.id;
 
-			var product = results[0];
-
-			var productList = products.map(function(product){
-				return{ 
-					id : product.id,
-					name : product.name,
-					selected : product.id === product.supplier_id
-				}
-			});
+	  req.getConnection(function(err, connection){
+	  	connection.query(productQuery, function(err, products){
+	  		connection.query(supplierQuery, function(err, suppliers){
+	  			if(err) return next(err);
+	  			
+		connection.query("select * from Purchases where Id =  ?", [purchaseId], function(err,results){
+			var purchase = results[0];
     			//console.log(err);
-    			res.render('purchase_edit', {
-    			 product : productList,
-    			 purchase : purchase    
-		  });
+    		var productList = products.map(function(product){
+    			return {
+    				id : product.id,
+    				name : product.name,
+    				selected : product.id === purchase.product_id
+    			}
+    		})
 
-	  });
+    		var supplierList = suppliers.map(function(supplier){
+    			return {
+    				id : supplier.id,
+    				name : supplier.name,
+    				selected : supplier.id === purchase.supplier_id
+    			}
+    		})
+    			   res.render('purchases_edit', {
+    			     products : productList,
+    			     suppliers : supplierList,
+    			     purchase : purchase 
 
-  });
+		            });
 
-});
+	            });
+           });
+
+        });
+
+    });	
+
+});  	
 
 app.post('/purchases/edit/:id', function(req, res){
 	 var id = req.params.id;
@@ -355,7 +375,6 @@ app.post('/purchases/edit/:id', function(req, res){
     });
 
   });
-
 
 
 app.get('/sales', db_sales.show);

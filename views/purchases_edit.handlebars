@@ -7,21 +7,38 @@
 <body>
    <h1>Edit purchase</h1>
 
-	<form action="/purchases/edit/{{purchase.id}}" method="post">
+	<form action="/purchases/edit/{{product.id}}" method="post">
 
-	    <select name="product_id" label="choose purchase">
-          {{#products}}
+	 <input type="number" name="quantity" min="0" max="1000" value="{{purchase.quantity}}">
+
+	    <select name="product_id" label="choose product">
+         {{#products}}
+
+          {{^selected}}
             <option value="{{id}}" >{{name}}</option>
-          {{/products}}
+          {{/selected}}
 
+           {{#selected}}
+            <option value="{{id}}" selected>{{name}}</option>
+           {{/selected}}
+
+         {{/products}}
  	   </select>
        
-       <select name="supplier_id">
-          {{#categories}}
+       <select name="supplier_id" label="choose a supplier">
+         {{#suppliers}}
+           
+           {{^selected}}
           <option value="{{id}}">{{name}}</option>
-          {{/categories}}
+          {{/selected}}
 
-		 <input type="text" name="purchase" placeholder="Edit purchase" value="{{purchase.name}}"/>	
+          {{#selected}}
+          <option value="{{id}}" selected>{{name}}</option>
+          {{/selected}}
+
+         {{/suppliers}}
+ 		
+		 <input type="currency" name="number" min="0" max="1000" placeholder="No.Sold" value="{{purchase.cost_price}}"/>	
 		 <input type="submit" name="submit" value="Submit"/>
 	</form>
 
