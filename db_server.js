@@ -387,6 +387,21 @@ app.post('/purchases/edit/:id', function(req, res){
 
   });
 
+app.get('/purchases/delete/:id', function(req, res){
+	var purchaseId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("delete from Purchases where Id =  ?", [purchaseId], function(err,results){
+			if(err)
+    			console.log(err);
+
+    			res.redirect('/purchases');    
+		});
+
+	});
+
+});
+
 
 app.get('/sales', db_sales.show);
 app.get('/sales/add', function(req, res){
