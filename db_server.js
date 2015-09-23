@@ -361,9 +361,20 @@ var productQuery = "select id, name from Products";
 });  	
 
 app.post('/purchases/edit/:id', function(req, res){
-	 var id = req.params.id;
-	 var data = { name : req.body.purchase};
-	 req.getConnection(function(err, connection){
+
+    var productsQuery = "select id, name from Products";
+    var supplierQuery = "select id, name from Suppliers";
+
+	var id = req.params.id;
+	var data = { 
+	 	quantity : req.body.quantity,
+	 	cost_price : req.body. noSold,
+	 	product_id : req.body. product_id,
+	 	supplier_id : req.body. supplier_id
+
+	}
+	
+	req.getConnection(function(err, connection){
 	 	connection.query("update Purchases set ? where Id = ?",[data,id] ,function(err, results){
 	 		if (err)
 	 			console.log(err);
