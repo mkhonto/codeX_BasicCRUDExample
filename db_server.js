@@ -42,7 +42,7 @@ app.get('/', db_products.show);
 app.get('/products', db_products.show);
 
 //this connect to the web form
-app.get('/products/add', function(req, res){
+app.get('/products/add', function(req, res, next){
 
   req.getConnection(function(err, connection){
 
@@ -87,7 +87,7 @@ app.get('/products/delete/:id', function(req, res){
 
 });
 
-app.get('/products/edit/:id', function(req, res){
+app.get('/products/edit/:id', function(req, res, next){
 
 	var categoryQuery = "select id, name from Categories";
 	var productId = req.params.id;
@@ -277,7 +277,7 @@ app.get('/suppliers/delete/:id', function(req, res){
 });
 
 app.get('/purchases', db_purchases.show);
-app.get('/purchases/add', function(req, res){
+app.get('/purchases/add', function(req, res, next){
 
 	req.getConnection(function(err, connection){
 		var products = "select id, name from Products";
@@ -315,7 +315,7 @@ app.post('/purchases/add', function(req, res){
 	});		  
 })
 
-app.get('/purchases/edit/:id', function(req, res){
+app.get('/purchases/edit/:id', function(req, res, next){
 
 var productQuery = "select id, name from Products";
 	var supplierQuery = "select id, name from Suppliers";
@@ -404,15 +404,26 @@ app.get('/purchases/delete/:id', function(req, res){
 
 
 app.get('/sales', db_sales.show);
-app.get('/sales/add', function(req, res){
-	res.render('sales_add')
-});
+app.get('/sales/add', function(req, res, next){
+
+	req.getConnection(function(err, connection){
+		var products = "select id, name from Sales";
+
+		  connection.query(products, function(err, products){
+		  	 if (err) return next(err);
+		 
+	         res.render('sales_add', {products : products});
+            });
+        });
+
 
 app.post('/sales/add', function(req, res){
-	var data = { 
-		      product_id : req.body.productId,
-		      name : req.body.sale
-		    		};
+	var data = {
+		date : req.body. date,
+		products_id : req.body. products_id,
+		no_sold : req.body. soldNumber,
+		selling_price : req.body. sellingPrice
+	}
 					
     req.getConnection(function(err, connection){
         connection.query("insert into Sales set ?", data, function(err,results){
@@ -421,9 +432,12 @@ app.post('/sales/add', function(req, res){
 
 			  res.redirect('/sales'); 
 		});
-	});		  
-});
 
+	  });	
+
+   })
+
+});
 //start the server
 app.listen(3000, function(){
 	console.log('Server started! At http://localhost: 3000');
