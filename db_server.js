@@ -407,22 +407,26 @@ app.get('/sales', db_sales.show);
 app.get('/sales/add', function(req, res, next){
 
 	req.getConnection(function(err, connection){
-		var products = "select id, name from Sales";
+		var products = "select id, name from Products";
+		var sales = "select no_sold, selling_Price from Sales";
+	
 
 		  connection.query(products, function(err, products){
+		  connection.query(sales, function(err, sales){
 		  	 if (err) return next(err);
 		 
-	         res.render('sales_add', {products : products});
+	         res.render('sales_add', {products : products, sales : sales});
             });
         });
 
+    });
 
 app.post('/sales/add', function(req, res){
 	var data = {
 		date : req.body. date,
 		products_id : req.body. products_id,
-		no_sold : req.body. soldNumber,
-		selling_price : req.body. sellingPrice
+		no_sold : req.body. no_sold,
+		selling_Price : req.body. selling_Price
 	}
 					
     req.getConnection(function(err, connection){
@@ -435,9 +439,82 @@ app.post('/sales/add', function(req, res){
 
 	  });	
 
-   })
+   });
 
 });
+
+app.get('/sales/edit/:id', function(req, res, next){
+
+var productQuery = "select id, name from Products";
+	var saleQuery = "select id, name from Sales";
+	var saleId = req.params.id;
+
+	  req.getConnection(function(err, connection){
+	  	connection.query(productQuery, function(err, products){
+	  		connection.query(supplierQuery, function(err, suppliers){
+	  			if(err) return next(err);
+	  			
+		connection.query("select * from Sales where Id =  ?", [saleId], function(err,results){
+			var sale = results[0];
+    			//console.log(err);
+    		var productList = products.map(function(product){
+    			return {
+    				id : product.id,
+    				name : product.name,
+    				selected : product.id === sale.product_id
+    			}
+    		})
+
+    		var supplierList = suppliers.map(function(supplier){
+    			return {
+    				id : supplier.id,
+    				name : supplier.name,
+    				selected : supplier.id === purchase.supplier_id
+    			}
+    		})
+    			   res.render('purchases_edit', {
+    			     products : productList,
+    			     suppliers : supplierList,
+    			     purchase : purchase 
+
+		            });
+
+	            });
+           });
+
+        });
+
+    });	
+
+});  	
+
+app.post('/purchases/edit/:id', function(req, res){
+
+    var productsQuery = "select id, name from Products";
+    var supplierQuery = "select id, name from Suppliers";
+
+	var id = req.params.id;
+	var data = { 
+	 	quantity : req.body.quantity,
+	 	cost_price : req.body. noSold,
+	 	product_id : req.body. product_id,
+	 	supplier_id : req.body. supplier_id
+
+	}
+	
+	req.getConnection(function(err, connection){
+	 	connection.query("update Purchases set ? where Id = ?",[data,id] ,function(err, results){
+	 		if (err)
+	 			console.log(err);
+
+	 		res.redirect('/purchases');
+
+	  	});
+
+    });
+
+  });
+  
 //start the server
 app.listen(3000, function(){
 	console.log('Server started! At http://localhost: 3000');

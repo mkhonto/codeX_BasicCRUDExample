@@ -7,9 +7,9 @@
    <h1>Add sales</h1>
 
 	<form action="/sales/add" method="post">
-	<input type="date" name="date" number="date_format" placeholder="date_format"> 
+	<input type="date" name="date" number="date_format" placeholder="date_format"/> 
 
-	 <select name="Products_id" label="choose Product">
+	 <select name="products_id" label="choose Product">
 	 
           {{#products}}
             <option value="{{id}}" >{{name}}</option>
@@ -17,8 +17,8 @@
 
  	   </select>
 
-        <input type="number" name="sold_number" placeholder="Sold Number"/>
-		<input type="number" name="selling_price" placeholder="selling price"/>	
+        <input type="number" name="no_sold" placeholder="no_sold"/>
+		<input type="currency" name="selling_Price" placeholder="selling_Price"/>	
 		<input type="submit" name="submit" value="Submit"/>
 	</form>
 
