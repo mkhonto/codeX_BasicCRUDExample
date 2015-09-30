@@ -446,40 +446,51 @@ app.post('/sales/add', function(req, res){
 app.get('/sales/edit/:id', function(req, res, next){
 
 var productQuery = "select id, name from Products";
-	var saleQuery = "select id, name from Sales";
-	var saleId = req.params.id;
+	var saleQuery = "select date_format(Sales.date, '%Y-%M-%e') as Date,Sales.id, Products.name as ProductName,Sales.no_sold as SoldNumber,Sales.selling_price as SellingPrice  from Sales  inner join Products on Sales.products_id = Products.id inner join Categories on Categories.id = Products.Category_id";
+	var products_Id = req.params.id;
+	// var dateQuery = "select id, date,products_id from Sales";
+
+	// console.log(dateQuery )
 
 	  req.getConnection(function(err, connection){
 	  	connection.query(productQuery, function(err, products){
-	  		connection.query(supplierQuery, function(err, suppliers){
+	  		connection.query(saleQuery, function(err, sales){
 	  			if(err) return next(err);
 	  			
-		connection.query("select * from Sales where Id =  ?", [saleId], function(err,results){
+		connection.query("select id, date_format(date, '%Y/%c/%e') as Date, products_id, no_sold, selling_Price from Sales where Id =  ?", [products_Id], function(err,results){
 			var sale = results[0];
     			//console.log(err);
+
     		var productList = products.map(function(product){
     			return {
     				id : product.id,
     				name : product.name,
-    				selected : product.id === sale.product_id
+    				selected : product.id === sale.products_id
     			}
-    		})
+    		});
 
-    		var supplierList = suppliers.map(function(supplier){
-    			return {
-    				id : supplier.id,
-    				name : supplier.name,
-    				selected : supplier.id === purchase.supplier_id
-    			}
-    		})
-    			   res.render('purchases_edit', {
+    		//console.log(productList);
+
+
+	    		var saleList = sales.map(function(sale){
+	    			return {
+	    				date : sale.date,
+	    				name: sale.ProductName,
+	    				no_sold : sale.SoldNumber,
+	    				selling_Price : sale.SellingPrice,
+	    				//selected : sale.Date === sale.Date
+	    			}
+	    		});
+    		
+    			   res.render('sales_edit', {
     			     products : productList,
-    			     suppliers : supplierList,
-    			     purchase : purchase 
+    			     //sales : saleList,
+    			     sale : sale 
 
 		            });
 
 	            });
+          
            });
 
         });
@@ -488,26 +499,25 @@ var productQuery = "select id, name from Products";
 
 });  	
 
-app.post('/purchases/edit/:id', function(req, res){
+app.post('/sales/edit/:id', function(req, res){
 
     var productsQuery = "select id, name from Products";
-    var supplierQuery = "select id, name from Suppliers";
+    var saleQuery = "select no_sold, selling_Price from Sales";
 
 	var id = req.params.id;
 	var data = { 
-	 	quantity : req.body.quantity,
-	 	cost_price : req.body. noSold,
-	 	product_id : req.body. product_id,
-	 	supplier_id : req.body. supplier_id
+	 	date : req.body.date,
+	 	no_sold : req.body.noSold,
+	 	selling_Price : req.body.selling_Price
 
 	}
 	
 	req.getConnection(function(err, connection){
-	 	connection.query("update Purchases set ? where Id = ?",[data,id] ,function(err, results){
+	 	connection.query("update Sales set ? where Id = ?",[data,id] ,function(err, results){
 	 		if (err)
 	 			console.log(err);
 
-	 		res.redirect('/purchases');
+	 		res.redirect('/sales');
 
 	  	});
 

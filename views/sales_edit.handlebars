@@ -1,14 +1,33 @@
 <html>
 <head>
-  <title>Edit sale</title>
+  <title>Edit sales</title>
 </head>
 
 <body>
-   <h1>Edit sale</h1>
+   <h1>Edit sales</h1>
 
-	<form action="/sales/edit/{{product.id}}" method="post">
-		 <input type="text" name="sale" placeholder="Edit product" value="{{product.name}}"/>	
-		 <input type="submit" name="submit" value="Submit"/>
+	<form action="/sales/edit" method="post">
+	<input type="text" name="Date"  placeholder="date_format" value="{{sale.Date}}"/> 
+
+	 <select name="products_id" label="choose Product">
+	 
+        {{#products}}
+
+           {{^selected}}
+            <option value="{{id}}" >{{name}}</option>
+           {{/selected}}
+
+           {{#selected}}
+            <option value="{{id}}" selected>{{name}}</option>
+           {{/selected}}
+
+        {{/products}}
+
+ 	   </select>
+
+        <input type="number" name="no_sold" placeholder="no_sold" value="{{sale.no_sold}}" />
+		<input type="currency" name="selling_Price" placeholder="selling_Price" value="{{sale.selling_Price}}" />	
+		<input type="submit" name="submit" value="Submit"/>
 	</form>
 
 </body>
