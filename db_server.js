@@ -502,15 +502,18 @@ var productQuery = "select id, name from Products";
 app.post('/sales/edit/:id', function(req, res){
 
     var productsQuery = "select id, name from Products";
-    var saleQuery = "select no_sold, selling_Price from Sales";
+    var saleQuery = "select id, date_format(date, '%Y/%c/%e') as Date, products_id, no_sold, selling_Price from Sales where Id =  ?";
 
 	var id = req.params.id;
 	var data = { 
-	 	date : req.body.date,
-	 	no_sold : req.body.noSold,
+	 	date : req.body.Date,
+	 	products_id : req.body.products_id,
+	 	no_sold : req.body.no_sold,
 	 	selling_Price : req.body.selling_Price
 
 	}
+	console.log(id);
+	console.log(data);
 	
 	req.getConnection(function(err, connection){
 	 	connection.query("update Sales set ? where Id = ?",[data,id] ,function(err, results){
@@ -524,6 +527,22 @@ app.post('/sales/edit/:id', function(req, res){
     });
 
   });
+
+app.get('/sales/delete/:id', function(req, res){
+	var productsId = req.params.id;
+	req.getConnection(function(err, connection){
+
+		connection.query("delete from Sales where Id =  ?", [productsId], function(err,results){
+			if(err)
+    			console.log(err);
+
+    			res.redirect('/sales');    
+		});
+
+	});
+
+});
+
   
 //start the server
 app.listen(3000, function(){

@@ -6,7 +6,7 @@
 <body>
    <h1>Edit sales</h1>
 
-	<form action="/sales/edit" method="post">
+	<form action="/sales/edit/{{sale.id}}" method="post">
 	<input type="text" name="Date"  placeholder="date_format" value="{{sale.Date}}"/> 
 
 	 <select name="products_id" label="choose Product">
